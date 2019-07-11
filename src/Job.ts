@@ -1,9 +1,11 @@
-import { PackageManager } from './interfaces'
+import { Docker, PackageManager } from './interfaces'
 
 export default class Job {
   name = ''
   package: PackageManager | null = null
+  dockers: Docker[] = []
   branches: string[] = []
+  requires: string[] = []
   tasksLiteral!: TemplateStringsArray
 
   constructor(name: string) {
@@ -45,8 +47,9 @@ export default class Job {
             },
           },
         ]
+      default:
+        throw new Error(`sorry, specified package manager ${this.package} is not implemented yet`)
     }
-    return []
   }
 
   toConfig() {
@@ -67,13 +70,32 @@ export default class Job {
   }
 
   toWorkflowConfig() {
+    if (this.branches.length === 0 && this.requires.length === 0) {
+      return this.name
+    }
+
+    const filterConfig =
+      this.branches.length === 0
+        ? {}
+        : {
+            filters: {
+              branches: {
+                only: this.branches,
+              },
+            },
+          }
+
+    const requiresConfig =
+      this.requires.length === 0
+        ? {}
+        : {
+            requires: this.requires,
+          }
+
     return {
       [this.name]: {
-        filters: {
-          branches: {
-            only: this.branches,
-          },
-        },
+        ...requiresConfig,
+        ...filterConfig,
       },
     }
   }

@@ -7,11 +7,16 @@ export default class Configuration {
   jobs: Job[] = []
   dockers: Docker[] = []
 
-  docker(image: string, config: object | undefined) {
-    this.dockers.push({
+  docker(image: string, config: object | undefined = {}) {
+    const dockerConfig = {
       image,
       ...config,
-    })
+    }
+    if (this.jobs.length > 0) {
+      this.lastJob().dockers.push(dockerConfig)
+    } else {
+      this.dockers.push(dockerConfig)
+    }
     return this
   }
 
@@ -24,8 +29,13 @@ export default class Configuration {
     return this.jobs.slice(-1)[0]
   }
 
-  branch(...branches: string[]) {
+  branches(...branches: string[]) {
     this.lastJob().branches = branches
+    return this
+  }
+
+  requires(...jobNames: string[]) {
+    this.lastJob().requires = jobNames
     return this
   }
 
@@ -46,7 +56,7 @@ export default class Configuration {
         (jobs, job) => ({
           ...jobs,
           [job.name]: {
-            docker: this.dockers,
+            docker: [...this.dockers, ...job.dockers],
             ...job.toConfig(),
           },
         }),
