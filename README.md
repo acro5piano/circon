@@ -22,7 +22,6 @@ yarn global add circon
 ```typescript
 const config = require('circon')
 
-// prettier-ignore
 config
   .docker('circleci/node:10.3.0')
   .docker('postgres', {
@@ -31,7 +30,6 @@ config
     },
   })
 
-// prettier-ignore
 config
   .define('test')
   .usePackage('yarn')
@@ -104,7 +102,6 @@ config
     },
   })
 
-// prettier-ignore
 config
   .define('graphdoc')
   .usePackage('yarn')
@@ -112,7 +109,6 @@ config
     yarn graphdoc
   `
 
-// prettier-ignore
 config
   .define('test')
   .usePackage('yarn')
@@ -122,7 +118,6 @@ config
     yarn test
   `
 
-// prettier-ignore
 config
   .define('deploy')
   .usePackage('yarn')
@@ -133,7 +128,6 @@ config
     yarn deploy
   `
 
-// prettier-ignore
 config
   .define('publish')
   .usePackage('yarn')
@@ -182,7 +176,6 @@ Create a configuration file (say `circle.js`) like this:
 ```typescript
 // circle.js
 
-// prettier-ignore
 config
   .define('test')
   .docker('circleci/node:10.3.0')
