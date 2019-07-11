@@ -2,21 +2,29 @@
 
 CircleCI Config generator
 
-# Installation
+# Install
 
-// TODO
+```
+npm install --save circon
+```
+
+Or if you use Yarn:
+
+```
+yarn add circon
+```
 
 # tl;dr
 
 ```typescript
 // prettier-ignore
-config
-  .docker('circleci/node:10.3.0')
-  .docker('postgres', {
-    environment: {
-      TZ: '/usr/share/zoneinfo/Africa/Abidjan',
-    },
-  })
+const config = require('circon')
+
+config.docker('circleci/node:10.3.0').docker('postgres', {
+  environment: {
+    TZ: '/usr/share/zoneinfo/Africa/Abidjan',
+  },
+})
 
 // prettier-ignore
 config
@@ -69,6 +77,8 @@ Although CircleCI can interpret YAML syntax like `<<: *defaults` or `- run: *set
 **circon** comes in to address this issue. It reduces a lot of your YAML code! For example, let's say more complex configuration:
 
 ```typescript
+const config = require('circon')
+
 config
   .docker('circleci/node:10.3.0', {
     environment: {
@@ -242,7 +252,6 @@ workflows:
 
 # TODO
 
-- npm publish
 - git tag
 - CLI tool
 - CircleCI conf
