@@ -75,6 +75,7 @@ export default class Configuration {
     return yaml.safeDump(this.toConfig(), {
       noRefs: true,
       noCompatMode: true,
+      lineWidth: 200,
     })
   }
 }

@@ -20,6 +20,7 @@ it('dumps correctly', () => {
     .usePackage('yarn')
     .tasks`
       yarn graphdoc
+      yarn extremely long task but this will not be multiple lines because line length limit is disabled
     `
 
   // prettier-ignore
@@ -76,6 +77,7 @@ it('dumps correctly', () => {
                 - node_modules
               key: 'v2-dependencies-{{ checksum "yarn.lock" }}'
           - run: yarn graphdoc
+          - run: yarn extremely long task but this will not be multiple lines because line length limit is disabled
       test:
         docker:
           - image: 'circleci/node:10.3.0'
