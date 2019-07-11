@@ -14,7 +14,13 @@ it('dumps correctly', () => {
       },
     })
 
-  const tslint = 'yarn tslint --write **/*.ts'
+  const installAwsCli = `
+  mkdir ~/.aws
+  echo '[default]' >> ~/.aws/credentials
+  echo aws_access_key_id = $AWS_ACCESS_KEY_ID >> ~/.aws/credentials
+  echo aws_secret_access_key = $AWS_SECRET_ACCESS_KEY >> ~/.aws/credentials
+  echo region = ap-northeast-1 >> ~/.aws/credentials
+`
 
   // prettier-ignore
   config
@@ -33,7 +39,6 @@ it('dumps correctly', () => {
     .docker('nats')
     .tasks`
       yarn test
-      ${tslint}
     `
 
   // prettier-ignore
@@ -43,6 +48,7 @@ it('dumps correctly', () => {
     .branches('beta', 'master')
     .requires('test')
     .tasks`
+      ${installAwsCli}
       yarn deploy
     `
 
@@ -53,6 +59,7 @@ it('dumps correctly', () => {
     .branches('release')
     .requires('test', 'deploy')
     .tasks`
+      ${installAwsCli}
       yarn publish
     `
 
@@ -103,7 +110,6 @@ it('dumps correctly', () => {
                 - node_modules
               key: 'v2-dependencies-{{ checksum "yarn.lock" }}'
           - run: yarn test
-          - run: yarn tslint --write **/*.ts
       deploy:
         docker:
           - image: 'circleci/node:10.3.0'
@@ -124,6 +130,11 @@ it('dumps correctly', () => {
               paths:
                 - node_modules
               key: 'v2-dependencies-{{ checksum "yarn.lock" }}'
+          - run: mkdir ~/.aws
+          - run: echo '[default]' >> ~/.aws/credentials
+          - run: echo aws_access_key_id = $AWS_ACCESS_KEY_ID >> ~/.aws/credentials
+          - run: echo aws_secret_access_key = $AWS_SECRET_ACCESS_KEY >> ~/.aws/credentials
+          - run: echo region = ap-northeast-1 >> ~/.aws/credentials
           - run: yarn deploy
       publish:
         docker:
@@ -145,6 +156,11 @@ it('dumps correctly', () => {
               paths:
                 - node_modules
               key: 'v2-dependencies-{{ checksum "yarn.lock" }}'
+          - run: mkdir ~/.aws
+          - run: echo '[default]' >> ~/.aws/credentials
+          - run: echo aws_access_key_id = $AWS_ACCESS_KEY_ID >> ~/.aws/credentials
+          - run: echo aws_secret_access_key = $AWS_SECRET_ACCESS_KEY >> ~/.aws/credentials
+          - run: echo region = ap-northeast-1 >> ~/.aws/credentials
           - run: yarn publish
     workflows:
       version: 2

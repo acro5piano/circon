@@ -84,6 +84,14 @@ Although CircleCI can interpret YAML syntax like `<<: *defaults` or `- run: *set
 ```typescript
 const config = require('circon')
 
+const installAwsCli = `
+  mkdir ~/.aws
+  echo '[default]' >> ~/.aws/credentials
+  echo aws_access_key_id = $AWS_ACCESS_KEY_ID >> ~/.aws/credentials
+  echo aws_secret_access_key = $AWS_SECRET_ACCESS_KEY >> ~/.aws/credentials
+  echo region = ap-northeast-1 >> ~/.aws/credentials
+`
+
 config
   .docker('circleci/node:10.3.0', {
     environment: {
@@ -121,6 +129,7 @@ config
   .branches('beta', 'master')
   .requires('test')
   .tasks`
+    ${installAwsCli}
     yarn deploy
   `
 
@@ -131,6 +140,7 @@ config
   .branches('release')
   .requires('test', 'deploy')
   .tasks`
+    ${installAwsCli}
     yarn publish
   `
 
