@@ -1,0 +1,2 @@
+# ccg
+CircleCI Config generator
