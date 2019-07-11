@@ -14,6 +14,8 @@ it('dumps correctly', () => {
       },
     })
 
+  const tslint = 'yarn tslint --write **/*.ts'
+
   // prettier-ignore
   config
     .define('graphdoc')
@@ -31,6 +33,7 @@ it('dumps correctly', () => {
     .docker('nats')
     .tasks`
       yarn test
+      ${tslint}
     `
 
   // prettier-ignore
@@ -100,6 +103,7 @@ it('dumps correctly', () => {
                 - node_modules
               key: 'v2-dependencies-{{ checksum "yarn.lock" }}'
           - run: yarn test
+          - run: yarn tslint --write **/*.ts
       deploy:
         docker:
           - image: 'circleci/node:10.3.0'

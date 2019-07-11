@@ -23,11 +23,13 @@ yarn global add circon
 const config = require('circon')
 
 // prettier-ignore
-config.docker('circleci/node:10.3.0').docker('postgres', {
-  environment: {
-    TZ: '/usr/share/zoneinfo/Africa/Abidjan',
-  },
-})
+config
+  .docker('circleci/node:10.3.0')
+  .docker('postgres', {
+    environment: {
+      TZ: '/usr/share/zoneinfo/Africa/Abidjan',
+    },
+  })
 
 // prettier-ignore
 config
@@ -143,6 +145,10 @@ The output is too long to paste here. Please see https://github.com/acro5piano/c
 
 Define default docker container to run. If you set this option after `define`, containers will run only in the job.
 
+**`config.define(taskName: string)`**
+
+Define a task.
+
 **`config.usePackage(package: 'yarn' | 'npm')`**
 
 Use specified package manager to install dependencies before tasks and save its cache.
@@ -155,7 +161,7 @@ Run only if current branch is specified branches.
 
 Do not run job if specified job failed.
 
-**`config.tasks(name: TemplateLiteralArray)`**
+**`config.tasks(name: TemplateStringsArray)`**
 
 Run specified commands.
 

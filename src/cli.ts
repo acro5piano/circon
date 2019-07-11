@@ -5,6 +5,8 @@ import config from '.'
 
 // prettier-ignore
 ;(global as any).config = config
+;(global as any).circle = config
+;(global as any).circleci = config
 
 const target = path.join(process.cwd(), process.argv[2])
 

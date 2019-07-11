@@ -39,8 +39,19 @@ export default class Configuration {
     return this
   }
 
-  tasks(...literal: TemplateStringsArray[]) {
-    this.lastJob().tasksLiteral = literal[0]
+  tasks(literals: TemplateStringsArray, ...placeholders: string[]) {
+    let result = ''
+
+    // interleave the literals with the placeholders
+    for (let i = 0; i < placeholders.length; i++) {
+      result += literals[i]
+      result += placeholders[i]
+    }
+
+    // add the last literal
+    result += literals[literals.length - 1]
+
+    this.lastJob().tasksLiteral = result
     return this
   }
 

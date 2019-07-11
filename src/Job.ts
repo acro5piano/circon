@@ -6,7 +6,7 @@ export default class Job {
   dockers: Docker[] = []
   branches: string[] = []
   requires: string[] = []
-  tasksLiteral!: TemplateStringsArray
+  tasksLiteral = ''
 
   constructor(name: string) {
     this.name = name
@@ -59,7 +59,6 @@ export default class Job {
         'checkout',
         ...this.toPackageManagerCommandsWithCache(),
         ...this.tasksLiteral
-          .toString()
           .split('\n')
           .filter(t => Boolean(t.match(/[a-z]/)))
           .map(t => ({
