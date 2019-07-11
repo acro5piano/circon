@@ -7,21 +7,21 @@ CircleCI Config generator
 # Install
 
 ```
-npm install --save circon
+npm -g install circon
 ```
 
 Or if you use Yarn:
 
 ```
-yarn add circon
+yarn global add circon
 ```
 
 # tl;dr
 
 ```typescript
-// prettier-ignore
 const config = require('circon')
 
+// prettier-ignore
 config.docker('circleci/node:10.3.0').docker('postgres', {
   environment: {
     TZ: '/usr/share/zoneinfo/Africa/Abidjan',
@@ -134,126 +134,59 @@ config
 console.log(config.dump())
 ```
 
-The output:
+The output is too long to paste here. Please see https://github.com/acro5piano/circon/blob/master/src/index.test.ts
 
-```yaml
-version: 2
-jobs:
-  graphdoc:
-    docker:
-      - image: 'circleci/node:10.3.0'
-        environment:
-          TZ: /usr/share/zoneinfo/Asia/Tokyo
-      - image: 'postgres'
-        environment:
-          TZ: /usr/share/zoneinfo/Africa/Abidjan
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - 'v2-dependencies-{{ checksum "yarn.lock" }}'
-            - v2-dependencies-
-      - run: yarn install
-      - save_cache:
-          paths:
-            - node_modules
-          key: 'v2-dependencies-{{ checksum "yarn.lock" }}'
-      - run: yarn graphdoc
-  test:
-    docker:
-      - image: 'circleci/node:10.3.0'
-        environment:
-          TZ: /usr/share/zoneinfo/Asia/Tokyo
-      - image: 'postgres'
-        environment:
-          TZ: /usr/share/zoneinfo/Africa/Abidjan
-      - image: nats
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - 'v2-dependencies-{{ checksum "yarn.lock" }}'
-            - v2-dependencies-
-      - run: yarn install
-      - save_cache:
-          paths:
-            - node_modules
-          key: 'v2-dependencies-{{ checksum "yarn.lock" }}'
-      - run: yarn test
-  deploy:
-    docker:
-      - image: 'circleci/node:10.3.0'
-        environment:
-          TZ: /usr/share/zoneinfo/Asia/Tokyo
-      - image: 'postgres'
-        environment:
-          TZ: /usr/share/zoneinfo/Africa/Abidjan
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - 'v2-dependencies-{{ checksum "yarn.lock" }}'
-            - v2-dependencies-
-      - run: yarn install
-      - save_cache:
-          paths:
-            - node_modules
-          key: 'v2-dependencies-{{ checksum "yarn.lock" }}'
-      - run: yarn deploy
-  publish:
-    docker:
-      - image: 'circleci/node:10.3.0'
-        environment:
-          TZ: /usr/share/zoneinfo/Asia/Tokyo
-      - image: 'postgres'
-        environment:
-          TZ: /usr/share/zoneinfo/Africa/Abidjan
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - 'v2-dependencies-{{ checksum "yarn.lock" }}'
-            - v2-dependencies-
-      - run: yarn install
-      - save_cache:
-          paths:
-            - node_modules
-          key: 'v2-dependencies-{{ checksum "yarn.lock" }}'
-      - run: yarn publish
-workflows:
-  version: 2
-  master_jobs:
-    jobs:
-      - graphdoc
-      - test:
-          filters:
-            branches:
-              only:
-                - develop
-      - deploy:
-          requires:
-            - test
-          filters:
-            branches:
-              only:
-                - beta
-                - master
-      - publish:
-          requires:
-            - test
-            - deploy
-          filters:
-            branches:
-              only:
-                - release
+# Options
+
+**`config.docker(name: string, config: any)`**
+
+Define default docker container to run. If you set this option after `define`, containers will run only in the job.
+
+**`config.usePackage(package: 'yarn' | 'npm')`**
+
+Use specified package manager to install dependencies before tasks and save its cache.
+
+**`config.branches(name: ...string[])`**
+
+Run only if current branch is specified branches.
+
+**`config.requires(name: ...string[])`**
+
+Do not run job if specified job failed.
+
+**`config.tasks(name: TemplateLiteralArray)`**
+
+Run specified commands.
+
+# CLI
+
+Create a configuration file (say `circle.js`) like this:
+
+```typescript
+// circle.js
+
+// prettier-ignore
+config
+  .define('test')
+  .docker('circleci/node:10.3.0')
+  .usePackage('yarn')
+  .tasks`
+    yarn test
+  `
+
+module.exports = config
+```
+
+Then run
+
+```
+circon circle.js
+```
+
+```
+
 ```
 
 # TODO
 
-- git tag
-- CLI tool
-- CircleCI conf
+- [ ] `git tag` support

@@ -1,10 +1,13 @@
 {
   "name": "circon",
-  "version": "0.0.4",
-  "main": "./build/index.js",
-  "repository": "git@github.com:acro5piano/ccg",
+  "version": "0.1.0",
   "author": "gosho-kazuya <ketsume0211@gmail.com>",
   "license": "MIT",
+  "repository": "git@github.com:acro5piano/ccg",
+  "main": "./build/index.js",
+  "bin": {
+    "circon": "./build/cli.js"
+  },
   "scripts": {
     "make:config": "node .circleci/config.js > .circleci/config.yml",
     "prepublish": "tsc",
