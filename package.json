@@ -1,6 +1,14 @@
 {
   "name": "circon",
   "version": "0.1.1",
+  "keywords": [
+    "circleci",
+    "configuration",
+    "config",
+    "utility",
+    "typescript",
+    "circon"
+  ],
   "author": "gosho-kazuya <ketsume0211@gmail.com>",
   "license": "MIT",
   "repository": "git@github.com:acro5piano/ccg",
