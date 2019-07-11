@@ -183,10 +183,6 @@ Then run
 circon circle.js
 ```
 
-```
-
-```
-
 # TODO
 
 - [ ] `git tag` support
