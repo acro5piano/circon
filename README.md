@@ -1,3 +1,4 @@
+[![npm version](https://badge.fury.io/js/circon.svg)](https://badge.fury.io/js/circon)
 [![CircleCI](https://circleci.com/gh/acro5piano/circon.svg?style=svg)](https://circleci.com/gh/acro5piano/circon)
 
 # Circon
