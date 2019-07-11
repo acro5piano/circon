@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/acro5piano/circon.svg?style=svg)](https://circleci.com/gh/acro5piano/circon)
+
 # Circon
 
 CircleCI Config generator
