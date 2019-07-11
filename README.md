@@ -245,3 +245,4 @@ workflows:
 - npm publish
 - git tag
 - CLI tool
+- CircleCI conf

@@ -1,3 +1,7 @@
 import Configuration from './Configuration'
 
-export default new Configuration()
+const config = new Configuration()
+
+export default config
+
+module.exports = config

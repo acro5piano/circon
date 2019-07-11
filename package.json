@@ -1,7 +1,7 @@
 {
-  "name": "ccg",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "circon",
+  "version": "0.0.1",
+  "main": "./build/index.js",
   "repository": "git@github.com:acro5piano/ccg",
   "author": "gosho-kazuya <ketsume0211@gmail.com>",
   "license": "MIT",
