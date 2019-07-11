@@ -718,6 +718,13 @@ ci-info@^2.0.0:
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-2.0.0.tgz#67a9e964be31a51e15e5010d58e6f12834002f46"
   integrity sha512-5tK7EtrZ0N+OLFMthtqOj4fI2Jeb88C4CAZPu25LDVUgXJ0A3Js4PMGqrn0JU1W0Mh1/Z8wZzYPxqUrXeBboCQ==
 
+circon@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/circon/-/circon-0.0.4.tgz#ad5f639cd0d8f7248fb991df02780a19055fa3f1"
+  integrity sha512-or4C8FkNbOkPs6WcUBWFkXkbiCIS7AL4RCGRUHWu8JjtHbJ/StKyEx26HXXBnfm6ZnDCecsx2nn7kxjBoHZ4bg==
+  dependencies:
+    js-yaml "^3.13.1"
+
 class-utils@^0.3.5:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/class-utils/-/class-utils-0.3.6.tgz#f93369ae8b9a7ce02fd41faad0ca83033190c463"
