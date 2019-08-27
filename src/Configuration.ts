@@ -7,16 +7,6 @@ const yaml = require('js-yaml')
 export default class Configuration {
   jobs: Job[] = []
   dockers: Docker[] = []
-  grouping = ''
-
-  group(groupName: string, callback: () => void) {
-    if (!groupName) {
-      throw new Error(`please set valid group name. received: ${groupName}`)
-    }
-    this.grouping = groupName
-    callback()
-    this.grouping = ''
-  }
 
   docker(image: string, config: object | undefined = {}) {
     const dockerConfig = {
