@@ -1,11 +1,19 @@
 import Job from './Job'
 import { Docker, PackageManager } from './interfaces'
+import { BundlerPackage, NPMPackage, YarnPackage } from './packages'
 
 const yaml = require('js-yaml')
 
 export default class Configuration {
   jobs: Job[] = []
   dockers: Docker[] = []
+  grouping = false
+
+  group(callback: () => void) {
+    this.grouping = true
+    callback()
+    this.grouping = false
+  }
 
   docker(image: string, config: object | undefined = {}) {
     const dockerConfig = {
@@ -56,8 +64,19 @@ export default class Configuration {
   }
 
   usePackage(pm: PackageManager) {
-    this.lastJob().package = pm
-    return this
+    switch (pm) {
+      case 'yarn':
+        this.lastJob().package = new YarnPackage()
+        return this
+      case 'npm':
+        this.lastJob().package = new NPMPackage()
+        return this
+      case 'bundler':
+        this.lastJob().package = new BundlerPackage()
+        return this
+      default:
+        throw new Error(`sorry, specified package manager ${pm} is not implemented yet`)
+    }
   }
 
   toConfig() {
