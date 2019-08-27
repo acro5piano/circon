@@ -8,9 +8,11 @@ export default class Job {
   branches: string[] = []
   requires: string[] = []
   tasksLiteral = ''
+  groupName = ''
 
-  constructor(name: string) {
+  constructor(name: string, groupName = '') {
     this.name = name
+    this.groupName = groupName
   }
 
   toPackageManagerCommandsWithCache() {

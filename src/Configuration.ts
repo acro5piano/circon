@@ -7,12 +7,15 @@ const yaml = require('js-yaml')
 export default class Configuration {
   jobs: Job[] = []
   dockers: Docker[] = []
-  grouping = false
+  grouping = ''
 
-  group(callback: () => void) {
-    this.grouping = true
+  group(groupName: string, callback: () => void) {
+    if (!groupName) {
+      throw new Error(`please set valid group name. received: ${groupName}`)
+    }
+    this.grouping = groupName
     callback()
-    this.grouping = false
+    this.grouping = ''
   }
 
   docker(image: string, config: object | undefined = {}) {
@@ -20,6 +23,14 @@ export default class Configuration {
       image,
       ...config,
     }
+
+    if (this.grouping) {
+      this.jobs
+        .filter(j => j.groupName === this.grouping)
+        .forEach(j => j.dockers.push(dockerConfig))
+      return this
+    }
+
     if (this.jobs.length > 0) {
       this.lastJob().dockers.push(dockerConfig)
     } else {
@@ -29,7 +40,11 @@ export default class Configuration {
   }
 
   define(name: string) {
-    this.jobs.push(new Job(name))
+    if (this.grouping) {
+      this.jobs.push(new Job(name, this.grouping))
+    } else {
+      this.jobs.push(new Job(name))
+    }
     return this
   }
 

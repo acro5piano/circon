@@ -8,7 +8,7 @@ test('dumps group', () => {
     },
   })
 
-  config.group(() => {
+  config.group('nodejs', () => {
     config.docker('circleci/node:10.3.0', {
       environment: {
         TZ: '/usr/share/zoneinfo/Asia/Tokyo',
@@ -24,17 +24,14 @@ test('dumps group', () => {
         `
   })
 
-  config.group(() => {
-    config.docker('circleci/ruby:2.5.0')
-
-    // prettier-ignore
-    config
-      .define('test')
-      .usePackage('bundler')
-      .tasks`
-          bundle exec rails test
-        `
-  })
+  // prettier-ignore
+  config
+    .define('test')
+    .docker('circleci/ruby:2.5.0')
+    .usePackage('bundler')
+    .tasks`
+        bundle exec rails test
+      `
 
   expect(config.toConfig()).toEqual(yaml.safeLoad`
     version: 2
@@ -65,9 +62,7 @@ test('dumps group', () => {
           - image: 'mysql:8'
             environment:
               TZ: /usr/share/zoneinfo/Asia/Tokyo
-          - image: 'ruby:2.5.0'
-            environment:
-              TZ: /usr/share/zoneinfo/Asia/Tokyo
+          - image: 'circleci/ruby:2.5.0'
         working_directory: ~/repo
         steps:
           - checkout
@@ -75,12 +70,12 @@ test('dumps group', () => {
               keys:
                 - 'v2-dependencies-{{ checksum "Gemfile.lock" }}'
                 - v2-dependencies-
-          - run: bundle install --path vendor/bundlele
+          - run: bundle install --path vendor/bundle
           - save_cache:
               paths:
-                - vendor/bundlele
+                - vendor
               key: 'v2-dependencies-{{ checksum "Gemfile.lock" }}'
-          - run: bundle exec ruby test
+          - run: bundle exec rails test
     workflows:
       version: 2
       master_jobs:
