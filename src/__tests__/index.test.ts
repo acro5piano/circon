@@ -1,7 +1,7 @@
-import config from '.'
+import config from '..'
 const yaml = require('js-yaml')
 
-it('dumps correctly', () => {
+test('dumps correctly', () => {
   config
     .docker('circleci/node:10.3.0', {
       environment: {

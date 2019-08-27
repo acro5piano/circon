@@ -1,4 +1,4 @@
-import config from '.'
+import config from '..'
 const yaml = require('js-yaml')
 
 it('dumps correctly', () => {
