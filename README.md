@@ -141,7 +141,7 @@ config
 console.log(config.dump())
 ```
 
-The output is too long to paste here. Please see https://github.com/acro5piano/circon/blob/master/src/index.test.ts
+The output is too long to paste here. Please see https://github.com/acro5piano/circon/blob/master/src/__tests__/index.test.ts
 
 # Options
 
