@@ -1,4 +1,4 @@
-import config from '.'
+import config from '..'
 const yaml = require('js-yaml')
 
 it('dumps correctly', () => {
@@ -21,6 +21,14 @@ it('dumps correctly', () => {
   echo aws_secret_access_key = $AWS_SECRET_ACCESS_KEY >> ~/.aws/credentials
   echo region = ap-northeast-1 >> ~/.aws/credentials
 `
+
+  // prettier-ignore
+  config
+    .define('rails')
+    .usePackage('bundler')
+    .tasks`
+      bundle exec rails test
+    `
 
   // prettier-ignore
   config
@@ -66,6 +74,27 @@ it('dumps correctly', () => {
   expect(config.toConfig()).toEqual(yaml.safeLoad`
     version: 2
     jobs:
+      rails:
+        docker:
+          - image: 'circleci/node:10.3.0'
+            environment:
+              TZ: /usr/share/zoneinfo/Asia/Tokyo
+          - image: 'postgres'
+            environment:
+              TZ: /usr/share/zoneinfo/Africa/Abidjan
+        working_directory: ~/repo
+        steps:
+          - checkout
+          - restore_cache:
+              keys:
+                - 'v2-dependencies-{{ checksum "Gemfile.lock" }}'
+                - v2-dependencies-
+          - run: bundle install --path vendor/bundle
+          - save_cache:
+              paths:
+                - vendor
+              key: 'v2-dependencies-{{ checksum "Gemfile.lock" }}'
+          - run: bundle exec rails test
       graphdoc:
         docker:
           - image: 'circleci/node:10.3.0'
@@ -166,6 +195,7 @@ it('dumps correctly', () => {
       version: 2
       master_jobs:
         jobs:
+          - rails
           - graphdoc
           - test:
               filters:
