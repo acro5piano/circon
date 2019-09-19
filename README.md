@@ -1,6 +1,8 @@
 [![npm version](https://badge.fury.io/js/circon.svg)](https://badge.fury.io/js/circon)
 [![CircleCI](https://circleci.com/gh/acro5piano/circon.svg?style=svg)](https://circleci.com/gh/acro5piano/circon)
 
+[warning] I found alternatives after created this package. `command` and `executer` added at CircleCI 2.1, and YAML anchor would save your time.
+
 # Circon
 
 CircleCI Config generator
