@@ -1,5 +1,6 @@
 import Job from './Job'
 import { Docker, PackageManager } from './interfaces'
+import { findPackage } from './packages'
 
 const yaml = require('js-yaml')
 
@@ -56,7 +57,7 @@ export default class Configuration {
   }
 
   usePackage(pm: PackageManager) {
-    this.lastJob().package = pm
+    this.lastJob().package = findPackage(pm)
     return this
   }
 

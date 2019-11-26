@@ -1,8 +1,9 @@
-import { Docker, PackageManager } from './interfaces'
+import { Docker } from './interfaces'
+import { Package } from './packages'
 
 export default class Job {
   name = ''
-  package: PackageManager | null = null
+  package: Package | null = null
   dockers: Docker[] = []
   branches: string[] = []
   requires: string[] = []
@@ -16,40 +17,7 @@ export default class Job {
     if (!this.package) {
       return []
     }
-    switch (this.package) {
-      case 'yarn':
-        return [
-          {
-            restore_cache: {
-              keys: ['v2-dependencies-{{ checksum "yarn.lock" }}', 'v2-dependencies-'],
-            },
-          },
-          { run: 'yarn install' },
-          {
-            save_cache: {
-              paths: ['node_modules'],
-              key: 'v2-dependencies-{{ checksum "yarn.lock" }}',
-            },
-          },
-        ]
-      case 'npm':
-        return [
-          {
-            restore_cache: {
-              keys: ['v2-dependencies-{{ checksum "package-lock.json" }}', 'v2-dependencies-'],
-            },
-          },
-          { run: 'npm install' },
-          {
-            save_cache: {
-              paths: ['node_modules'],
-              key: 'v2-dependencies-{{ checksum "package-lock.json" }}',
-            },
-          },
-        ]
-      default:
-        throw new Error(`sorry, specified package manager ${this.package} is not implemented yet`)
-    }
+    return this.package.toCommands()
   }
 
   toConfig() {
